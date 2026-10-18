@@ -1,36 +1,25 @@
-// Loads the herbs from data/herbs.json and shows each one as a card.
-
-const list = document.querySelector("#herb-list")
+﻿const herbsSection = document.querySelector("#herbs")
+const herbsList = document.querySelector("#herbs-list")
 const count = document.querySelector(".count")
+const detailSection = document.querySelector("#herb-detail")
 
-async function loadHerbs() {
-  const response = await fetch("data/herbs.json")
-  if (!response.ok) {
-    throw new Error(`Could not load ${response.url}: ${response.status} ${response.statusText}`)
-  }
-  return response.json()
-}
-
+// 1. Helper to create DOM elements
 function element(tag, className, text) {
-  const node = document.createElement(tag)
-  node.className = className
-  node.textContent = text
-  return node
+    const node = document.createElement(tag)
+    if (className) node.className = className
+    if (text) node.textContent = text
+    return node
 }
 
+// 2. Build herb card for the main list
 function card(herb) {
     const item = element("li", "card", "")
+    const slug = herb.name.toLowerCase()
 
-    let titleNode
-    if (herb.name.toLowerCase() === "sage") {
-        titleNode = element("h3", "name", "")
-        const link = document.createElement("a")
-        link.href = "sage.html"
-        link.textContent = herb.name
-        titleNode.append(link)
-    } else {
-        titleNode = element("h3", "name", herb.name)
-    }
+    const titleNode = element("h3", "name", "")
+    const link = element("a", "herb-link", herb.name)
+    link.href = `#${slug}`
+    titleNode.append(link)
 
     item.append(
         titleNode,
@@ -38,14 +27,103 @@ function card(herb) {
         element("p", "use", herb.use),
         element("p", "life", herb.life)
     )
-
     return item
 }
 
-async function show() {
-  const herbs = await loadHerbs()
-    list.replaceChildren(...herbs.map(card))
-  count.textContent = `${herbs.length} herbs grow here.`
+// 3. Load full list of herbs for the overview
+async function loadHerbs() {
+    const response = await fetch("data/herbs.json")
+    if (!response.ok) {
+        throw new Error(`Could not load herbs: ${response.status}`)
+    }
+    return response.json()
 }
 
-show()
+// 4. Load a single herb by its slug (e.g., "basil" -> "data/basil.json")
+async function loadHerbDetail(slug) {
+    const response = await fetch(`data/${slug}.json`)
+    if (!response.ok) {
+        throw new Error(`Could not load data/${slug}.json: ${response.status}`)
+    }
+    return response.json()
+}
+
+// 5. Render individual herb detail view
+async function showDetail(slug) {
+    herbsSection.hidden = true
+    detailSection.hidden = false
+    detailSection.replaceChildren(element("p", "status", "Loading herb…"))
+
+    try {
+        const herb = await loadHerbDetail(slug)
+
+        const article = element("article", "herb-article", "")
+
+        const backLink = element("a", "back-link", "← Back to all herbs")
+        backLink.href = "#herbs"
+
+        const header = element("header", "herb-header", "")
+        header.append(
+            element("h2", "name", herb.name),
+            element("p", "latin-name", herb.latin)
+        )
+
+        const grid = element("div", "herb-info-grid", "")
+
+        const useCard = element("div", "info-card", "")
+        useCard.append(
+            element("h3", "", "Culinary & Practical Use"),
+            element("p", "", herb.use)
+        )
+
+        const lifeCard = element("div", "info-card", "")
+        lifeCard.append(
+            element("h3", "", "Life Cycle"),
+            element("p", "", herb.life)
+        )
+
+        grid.append(useCard, lifeCard)
+        article.append(backLink, header, grid)
+
+        detailSection.replaceChildren(article)
+    } catch (error) {
+        detailSection.replaceChildren(
+            element("p", "error", `Could not find data for "${slug}".`),
+            element("a", "back-link", "← Back to all herbs")
+        )
+        detailSection.querySelector("a").href = "#herbs"
+        console.error(error)
+    }
+}
+
+// 6. Render main herbs list
+async function showList() {
+    detailSection.hidden = true
+    herbsSection.hidden = false
+
+    try {
+        const herbs = await loadHerbs()
+        herbsList.replaceChildren(...herbs.map(card))
+        count.textContent = `${herbs.length} herbs grow here.`
+    } catch (error) {
+        count.textContent = "Failed to load herbs."
+        console.error(error)
+    }
+}
+
+// 7. Hash router
+function handleRoute() {
+    const hash = window.location.hash.replace("#", "").toLowerCase()
+
+    // Standard section navigation or empty hash
+    if (!hash || hash === "herbs" || hash === "visit" || hash === "about") {
+        showList()
+    } else {
+        showDetail(hash)
+    }
+}
+
+window.addEventListener("hashchange", handleRoute)
+
+// Initial run on page load
+handleRoute()
