@@ -19,13 +19,27 @@ function element(tag, className, text) {
 }
 
 function card(herb) {
-  const item = element("li", "card", "")
-  item.append(
-    element("h3", "name", herb.name),
-    element("p", "latin", herb.latin),
-    element("p", "use", herb.use),
-    element("p", "life", herb.life))
-  return item
+    const item = element("li", "card", "")
+
+    let titleNode
+    if (herb.name.toLowerCase() === "sage") {
+        titleNode = element("h3", "name", "")
+        const link = document.createElement("a")
+        link.href = "sage.html"
+        link.textContent = herb.name
+        titleNode.append(link)
+    } else {
+        titleNode = element("h3", "name", herb.name)
+    }
+
+    item.append(
+        titleNode,
+        element("p", "latin", herb.latin),
+        element("p", "use", herb.use),
+        element("p", "life", herb.life)
+    )
+
+    return item
 }
 
 async function show() {
