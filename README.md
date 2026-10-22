@@ -1,4 +1,4 @@
-﻿# Samuel Brabec(Distant-Night), Ivan Budko(rabochiyclasss)
+# Samuel Brabec(Distant-Night), Ivan Budko(rabochiyclasss)
 # The Little Herb Garden
 
 A responsive single-page web application (SPA) displaying garden herbs, built using vanilla web technologies (HTML, CSS, JavaScript) without any external frameworks or libraries.
@@ -81,13 +81,15 @@ You are done when:
 
 ## Features & Usage
 
-1. **Catalog Overview (`#herbs`):**
+1. **Catalog Overview & Filtering (`#herbs`):**
    - Displays all herbs as interactive cards.
-   - Includes real-time search filtering by herb name, Latin name, lifecycle, or culinary use.
+   - Includes real-time search filtering (`#herb-search`) by herb name, Latin name, or culinary use, and a lifecycle dropdown filter (`#herb-filter`) backed by client-side state.
 2. **Dynamic Detail View (`#<herb>`):**
    - Loads specific herb data on demand via `fetch()` without full-page reloads.
 3. **Graceful Error Handling:**
-   - Displays dedicated recovery cards when an unknown herb hash is entered (404) or when the server is unreachable, offering a clear way back to the catalog.
+   - Displays dedicated recovery cards when an unknown herb hash is entered (404), when a data file is missing, or when the server is unreachable, offering a clear way back to the catalog.
+4. **Dark Mode Theme Toggle (`#theme-toggle`):**
+   - Switches between light and dark color schemes directly from the header and saves the user's preference in `localStorage`.
 
 ---
 
