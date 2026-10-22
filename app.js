@@ -4,7 +4,7 @@ const count = document.querySelector(".count")
 const detailSection = document.querySelector("#herb-detail")
 
 const searchInput = document.querySelector("#herb-search")
-const filterSelect = document.querySelector("herb-filter")
+const filterSelect = document.querySelector("#herb-filter")
 
 const state = {
     herbs: [],
@@ -147,26 +147,47 @@ async function showDetail(slug) {
     }
 }
 
+// Rendering the list based on the search query (searchQuery) and filter (lifeFilter)
+function renderFilteredHerbs() {
+    const filtered = state.herbs.filter((herb) => {
+        const matchesSearch =
+            herb.name.toLowerCase().includes(state.searchQuery) ||
+            herb.use.toLowerCase().includes(state.searchQuery)
+        const matchesLife =
+            state.lifeFilter === "all" || herb.life === state.lifeFilter
+        return matchesSearch && matchesLife
+    })
+    herbsList.replaceChildren(...filtered.map(card))
+    count.textContent = `Showing ${filtered.length} of ${state.herbs.length} herbs.`
+}
 // Render main herbs list + modified to handle errors with a predefined error function
 async function showList() {
     detailSection.hidden = true
     herbsSection.hidden = false
-
     if (lastFocusedElement) {
         lastFocusedElement.focus()
         lastFocusedElement = null
     }
-
     try {
-        const herbs = await loadHerbs()
-        herbsList.replaceChildren(...herbs.map(card))
-        count.textContent = `${herbs.length} herbs grow here.`
+        if (state.herbs.length === 0) {
+            state.herbs = await loadHerbs()
+        }
+        renderFilteredHerbs()
     } catch (error) {
         count.textContent = error.message
         herbsList.replaceChildren()
     }
 }
-
+// Listen for input in the search field
+searchInput.addEventListener("input", (event) => {
+    state.searchQuery = event.target.value.trim().toLowerCase()
+    renderFilteredHerbs()
+})
+// Select an option from the “Life Cycle” drop-down list
+filterSelect.addEventListener("change", (event) => {
+    state.lifeFilter = event.target.value
+    renderFilteredHerbs()
+})
 // Hash router
 function handleRoute() {
     const hash = window.location.hash.replace("#", "").toLowerCase()
