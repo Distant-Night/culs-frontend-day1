@@ -3,6 +3,10 @@ const herbsList = document.querySelector("#herbs-list")
 const count = document.querySelector(".count")
 const detailSection = document.querySelector("#herb-detail")
 
+
+// Variable to remember the last focused link
+let lastFocusedElement = null
+
 // Helper to create DOM elements
 function element(tag, className, text) {
     const node = document.createElement(tag)
@@ -19,6 +23,9 @@ function card(herb) {
     const titleNode = element("h3", "name", "")
     const link = element("a", "herb-link", herb.name)
     link.href = `#${slug}`
+    link.addEventListener("click", () => {
+        lastFocusedElement = link
+    })
     titleNode.append(link)
 
     item.append(
@@ -77,8 +84,11 @@ async function showDetail(slug) {
         backLink.href = "#herbs"
 
         const header = element("header", "herb-header", "")
+        const heading = element("h2", "name", herb.name)
+        heading.tabIndex = -1 // Allows JavaScript to focus on it without disrupting normal Tab order
+
         header.append(
-            element("h2", "name", herb.name),
+            heading,
             element("p", "latin-name", herb.latin || "Botanical name unavailable")
         )
 
@@ -96,6 +106,8 @@ async function showDetail(slug) {
             element("p", "", herb.life || "Unknown")
         )
 
+
+
         grid.append(useCard, lifeCard)
         article.append(backLink, header, grid)
 
@@ -109,6 +121,7 @@ async function showDetail(slug) {
 
         errorBox.append(title, message, backLink)
         detailSection.replaceChildren(errorBox)
+        backLink.focus()
     }
 }
 
@@ -116,6 +129,11 @@ async function showDetail(slug) {
 async function showList() {
     detailSection.hidden = true
     herbsSection.hidden = false
+
+    if (lastFocusedElement) {
+        lastFocusedElement.focus()
+        lastFocusedElement = null
+    }
 
     try {
         const herbs = await loadHerbs()
@@ -140,6 +158,13 @@ function handleRoute() {
 }
 
 window.addEventListener("hashchange", handleRoute)
+
+// Keyboard shortcut: Escape returns to the list from detail or error views
+window.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !detailSection.hidden) {
+        window.location.hash = "#herbs"
+    }
+})
 
 // Initial run on page load
 handleRoute()
