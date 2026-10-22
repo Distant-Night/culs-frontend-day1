@@ -41,7 +41,7 @@ function card(herb) {
 
     // Save reference for keyboard focus management
     link.addEventListener("click", () => {
-        lastFocusedElement = link
+         lastFocusedElement = `#${slug}`
     })
 
     // Card footer with a subtle "View herb" cue
@@ -167,15 +167,16 @@ function renderFilteredHerbs() {
 async function showList() {
     detailSection.hidden = true
     herbsSection.hidden = false
-    if (lastFocusedElement) {
-        lastFocusedElement.focus()
-        lastFocusedElement = null
-    }
     try {
         if (state.herbs.length === 0) {
             state.herbs = await loadHerbs()
         }
         renderFilteredHerbs()
+        if (lastFocusedElement) {
+            const target = herbsList.querySelector(`a[href="${lastFocusedElement}"]`)
+            if (target) target.focus()
+            lastFocusedElement = null
+        }
     } catch (error) {
         count.textContent = error.message
         herbsList.replaceChildren()
