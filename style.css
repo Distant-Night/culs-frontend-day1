@@ -406,3 +406,68 @@ footer {
         padding: 1rem 1.25rem;
     }
 }
+
+
+/* Search & Filter Controls */
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+.controls label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--leaf-dark);
+}
+.controls input,
+.controls select {
+    padding: 0.4rem 0.7rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    color: var(--ink);
+    font: inherit;
+}
+/* Theme Toggle Button & Dark Mode */
+.theme-toggle {
+    padding: 0.35rem 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+.theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.22);
+}
+body.dark-mode {
+    --paper: #121a15;
+    --surface: #1b261f;
+    --ink: #e6efe9;
+    --line: #2d3f33;
+    --leaf: #74c69d;
+    --leaf-dark: #95d5b2;
+    --leaf-light: #233b2d;
+    --soil: #b7c4bc;
+    --soil-light: #9aab9f;
+}
+body.dark-mode .site-header {
+    background: #132a1f;
+    border-bottom: 1px solid var(--line);
+}
+body.dark-mode .intro p,
+body.dark-mode .card p.use,
+body.dark-mode .info-card p {
+    color: #c2d1c7;
+}
+body.dark-mode .info-card,
+body.dark-mode footer {
+    background: #162019;
+}

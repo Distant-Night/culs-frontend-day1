@@ -213,5 +213,19 @@ window.addEventListener("keydown", (event) => {
     }
 })
 
+
+// Dark mode toggle with localStorage persistence
+const themeToggle = document.querySelector("#theme-toggle")
+if (localStorage.getItem("theme") === "dark") {
+    document.body.classList.add("dark-mode")
+    themeToggle.textContent = "☀️ Light"
+}
+themeToggle.addEventListener("click", () => {
+    const isDark = document.body.classList.toggle("dark-mode")
+    themeToggle.textContent = isDark ? "☀️ Light" : "🌙 Dark"
+    localStorage.setItem("theme", isDark ? "dark" : "light")
+})
+
+
 // Initial run on page load
 handleRoute()
