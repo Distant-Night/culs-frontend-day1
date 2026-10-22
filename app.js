@@ -43,16 +43,27 @@ async function loadHerbs() {
     }
 }
 
-// Load a single herb by its slug (e.g., "basil" -> "data/basil.json")
+// Load a single herb by its slug (e.g., "basil" -> "data/basil.json") + error handling
 async function loadHerbDetail(slug) {
-    const response = await fetch(`data/${slug}.json`)
-    if (!response.ok) {
-        throw new Error(`Could not load data/${slug}.json: ${response.status}`)
+    let response
+    try {
+        response = await fetch(`data/${slug}.json`)
+    } catch (networkError) {
+        throw new Error("Network error: Unable to communicate with the server.")
     }
-    return response.json()
+
+    if (response.status === 404) {
+        throw new Error(`The herb "${slug}" does not exist in our garden records.`)
+    }
+
+    if (!response.ok) {
+        throw new Error(`Failed to load data for "${slug}" (Status: ${response.status}).`)
+    }
+
+    return await response.json()
 }
 
-// Render individual herb detail view
+// Render individual herb detail view + error handling
 async function showDetail(slug) {
     herbsSection.hidden = true
     detailSection.hidden = false
@@ -62,14 +73,13 @@ async function showDetail(slug) {
         const herb = await loadHerbDetail(slug)
 
         const article = element("article", "herb-article", "")
-
         const backLink = element("a", "back-link", "← Back to all herbs")
         backLink.href = "#herbs"
 
         const header = element("header", "herb-header", "")
         header.append(
             element("h2", "name", herb.name),
-            element("p", "latin-name", herb.latin)
+            element("p", "latin-name", herb.latin || "Botanical name unavailable")
         )
 
         const grid = element("div", "herb-info-grid", "")
@@ -77,13 +87,13 @@ async function showDetail(slug) {
         const useCard = element("div", "info-card", "")
         useCard.append(
             element("h3", "", "Culinary & Practical Use"),
-            element("p", "", herb.use)
+            element("p", "", herb.use || "No usage instructions available.")
         )
 
         const lifeCard = element("div", "info-card", "")
         lifeCard.append(
             element("h3", "", "Life Cycle"),
-            element("p", "", herb.life)
+            element("p", "", herb.life || "Unknown")
         )
 
         grid.append(useCard, lifeCard)
@@ -91,12 +101,14 @@ async function showDetail(slug) {
 
         detailSection.replaceChildren(article)
     } catch (error) {
-        detailSection.replaceChildren(
-            element("p", "error", `Could not find data for "${slug}".`),
-            element("a", "back-link", "← Back to all herbs")
-        )
-        detailSection.querySelector("a").href = "#herbs"
-        console.error(error)
+        const errorBox = element("div", "error-card", "")
+        const title = element("h2", "error-title", "Herb Not Available")
+        const message = element("p", "error-message", error.message)
+        const backLink = element("a", "back-link", "← Back to all herbs")
+        backLink.href = "#herbs"
+
+        errorBox.append(title, message, backLink)
+        detailSection.replaceChildren(errorBox)
     }
 }
 
