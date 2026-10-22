@@ -1,3 +1,4 @@
+# Samuel Brabec(Distant-Night), Ivan Budko(rabochiyclasss)
 # The Little Herb Garden
 
 A small website for day 1 of **Frontend Development**.
