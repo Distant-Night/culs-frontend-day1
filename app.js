@@ -1,4 +1,4 @@
-﻿const herbsSection = document.querySelector("#herbs")
+const herbsSection = document.querySelector("#herbs")
 const herbsList = document.querySelector("#herbs-list")
 const count = document.querySelector(".count")
 const detailSection = document.querySelector("#herb-detail")
