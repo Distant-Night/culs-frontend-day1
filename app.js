@@ -3,7 +3,7 @@ const herbsList = document.querySelector("#herbs-list")
 const count = document.querySelector(".count")
 const detailSection = document.querySelector("#herb-detail")
 
-// 1. Helper to create DOM elements
+// Helper to create DOM elements
 function element(tag, className, text) {
     const node = document.createElement(tag)
     if (className) node.className = className
@@ -11,7 +11,7 @@ function element(tag, className, text) {
     return node
 }
 
-// 2. Build herb card for the main list
+// Build herb card for the main list
 function card(herb) {
     const item = element("li", "card", "")
     const slug = herb.name.toLowerCase()
@@ -30,16 +30,20 @@ function card(herb) {
     return item
 }
 
-// 3. Load full list of herbs for the overview
+// Load full list of herbs for the overview + along with some minor error handling
 async function loadHerbs() {
-    const response = await fetch("data/herbs.json")
-    if (!response.ok) {
-        throw new Error(`Could not load herbs: ${response.status}`)
+    try {
+        const response = await fetch("data/herbs.json")
+        if (!response.ok) {
+            throw new Error(`Server returned ${response.status} (${response.statusText || "Error"})`)
+        }
+        return await response.json()
+    } catch (error) {
+        throw new Error("Unable to connect to the server. Please check that the local server is running.")
     }
-    return response.json()
 }
 
-// 4. Load a single herb by its slug (e.g., "basil" -> "data/basil.json")
+// Load a single herb by its slug (e.g., "basil" -> "data/basil.json")
 async function loadHerbDetail(slug) {
     const response = await fetch(`data/${slug}.json`)
     if (!response.ok) {
@@ -48,7 +52,7 @@ async function loadHerbDetail(slug) {
     return response.json()
 }
 
-// 5. Render individual herb detail view
+// Render individual herb detail view
 async function showDetail(slug) {
     herbsSection.hidden = true
     detailSection.hidden = false
@@ -96,7 +100,7 @@ async function showDetail(slug) {
     }
 }
 
-// 6. Render main herbs list
+// Render main herbs list + modified to handle errors with a predefined error function
 async function showList() {
     detailSection.hidden = true
     herbsSection.hidden = false
@@ -106,12 +110,12 @@ async function showList() {
         herbsList.replaceChildren(...herbs.map(card))
         count.textContent = `${herbs.length} herbs grow here.`
     } catch (error) {
-        count.textContent = "Failed to load herbs."
-        console.error(error)
+        count.textContent = error.message
+        herbsList.replaceChildren()
     }
 }
 
-// 7. Hash router
+// Hash router
 function handleRoute() {
     const hash = window.location.hash.replace("#", "").toLowerCase()
 
