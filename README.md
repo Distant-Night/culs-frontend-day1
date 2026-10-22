@@ -64,3 +64,17 @@ app.js        what it does
 data/         the herbs, as JSON
 images/       the logo and a picture
 ```
+
+## Herb Data Format
+
+Each herb is stored individually in its own JSON file under the `data/` directory named after its lowercase slug (e.g., `data/basil.json`).
+
+Every JSON file must adhere to the following schema:
+
+```json
+{
+  "name": "String (Required) - Common name of the herb",
+  "latin": "String (Required) - Botanical Latin name",
+  "use": "String (Required) - Practical and culinary applications",
+  "life": "String (Required) - Life cycle (e.g., 'annual' or 'perennial')"
+}
