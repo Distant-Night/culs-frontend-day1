@@ -61,15 +61,16 @@ function card(herb) {
 
 // Load full list of herbs for the overview + along with some minor error handling
 async function loadHerbs() {
+    let response
     try {
-        const response = await fetch("data/herbs.json")
-        if (!response.ok) {
-            throw new Error(`Server returned ${response.status} (${response.statusText || "Error"})`)
-        }
-        return await response.json()
+        response = await fetch("data/herbs.json")
     } catch (error) {
         throw new Error("Unable to connect to the server. Please check that the local server is running.")
     }
+    if (!response.ok) {
+        throw new Error(`Could not load herbs list (Status: ${response.status}).`)
+    }
+    return await response.json()
 }
 
 // Load a single herb by its slug (e.g., "basil" -> "data/basil.json") + error handling
@@ -134,6 +135,7 @@ async function showDetail(slug) {
         article.append(backLink, header, grid)
 
         detailSection.replaceChildren(article)
+        heading.focus()
     } catch (error) {
         const errorBox = element("div", "error-card", "")
         const title = element("h2", "error-title", "Herb Not Available")
@@ -152,6 +154,7 @@ function renderFilteredHerbs() {
     const filtered = state.herbs.filter((herb) => {
         const matchesSearch =
             herb.name.toLowerCase().includes(state.searchQuery) ||
+            herb.latin.toLowerCase().includes(state.searchQuery) ||
             herb.use.toLowerCase().includes(state.searchQuery)
         const matchesLife =
             state.lifeFilter === "all" || herb.life === state.lifeFilter
