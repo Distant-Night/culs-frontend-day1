@@ -1,249 +1,408 @@
 /* The Little Herb Garden */
 
 :root {
-  --leaf: #2f6b3a;
-  --leaf-light: #e7f1e4;
-  --soil: #5b4636;
-  --paper: #fbfaf5;
-  --ink: #1f2420;
-  --line: #cfdccb;
+    --leaf: #2d6a4f;
+    --leaf-dark: #1b4332;
+    --leaf-light: #e8f5e9;
+    --leaf-accent: #52b788;
+    --soil: #5c4d3c;
+    --soil-light: #7c6a58;
+    --paper: #faf8f5;
+    --surface: #ffffff;
+    --ink: #1f2421;
+    --line: #e2e8df;
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.04);
+    --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.09);
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
 }
 
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 body {
-  margin: 0;
-  font-family: system-ui, sans-serif;
-  line-height: 1.5;
-  color: var(--ink);
-  background: var(--paper);
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    line-height: 1.6;
+    color: var(--ink);
+    background-color: var(--paper);
+    -webkit-font-smoothing: antialiased;
 }
 
 a {
-  color: var(--leaf);
+    color: var(--leaf);
+    transition: color 0.15s ease;
 }
 
+/* Header & Navigation */
 .site-header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem 1.5rem;
-  background: var(--leaf);
-  color: white;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1rem 2rem;
+    background: var(--leaf-dark);
+    color: #ffffff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
 }
 
-.site-header a {
-  color: white;
-}
+    .site-header a {
+        color: #ffffff;
+        text-decoration: none;
+        font-weight: 500;
+        transition: opacity 0.15s ease;
+    }
+
+        .site-header a:hover {
+            opacity: 0.85;
+        }
 
 .site-name {
-  margin: 0;
-  font-size: 1.25rem;
-  font-weight: 700;
+    margin: 0;
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
 }
 
 nav {
-  margin-left: auto;
+    margin-left: auto;
 }
 
-nav ul {
-  display: flex;
-  gap: 1.5rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
+    nav ul {
+        display: flex;
+        gap: 1.5rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
 
+    nav a {
+        padding: 0.35rem 0.6rem;
+        border-radius: var(--radius-sm);
+    }
+
+        nav a:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+/* Main Content Layout */
 main {
-  max-width: 60rem;
-  margin: 0 auto;
-  padding: 1.5rem;
+    max-width: 64rem;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem;
 }
 
 section {
-  margin-bottom: 2.5rem;
+    margin-bottom: 3.5rem;
 }
 
+h2 {
+    font-size: 1.85rem;
+    font-weight: 700;
+    color: var(--leaf-dark);
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+}
+
+.count {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    color: var(--soil-light);
+    font-size: 0.95rem;
+}
+
+/* Intro Hero */
 .intro {
-  display: grid;
-  gap: 1.5rem;
-  align-items: center;
+    display: grid;
+    gap: 2rem;
+    align-items: center;
 }
 
 @media (min-width: 40rem) {
-  .intro {
-    grid-template-columns: 1fr 1fr;
-  }
+    .intro {
+        grid-template-columns: 1.1fr 0.9fr;
+    }
+}
+
+.intro p {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #333d36;
 }
 
 .hero {
-  width: 100%;
-  height: auto;
-  border-radius: 0.5rem;
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--line);
 }
 
+/* Herb Catalog Grid */
 .cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
-  gap: 1rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: 1.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
 }
 
 .card {
-  padding: 1rem;
-  border: 1px solid var(--line);
-  border-radius: 0.5rem;
-  background: white;
+    position: relative; /* Context for stretched link */
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
 }
 
-.card h3 {
-  margin: 0;
-}
+    .card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-md);
+        border-color: #a3c49d;
+    }
 
-.latin {
-  margin: 0 0 0.5rem;
-  font-style: italic;
-  color: var(--soil);
-}
-
+/* Life cycle badge pinned at top-left */
 .life {
-  display: inline-block;
-  margin: 0;
-  padding: 0.1rem 0.6rem;
-  border-radius: 1rem;
-  background: var(--leaf-light);
-  font-size: 0.875rem;
+    align-self: flex-start;
+    margin: 0 0 0.85rem 0;
+    padding: 0.2rem 0.65rem;
+    border-radius: 9999px;
+    background: var(--leaf-light);
+    color: var(--leaf-dark);
+    border: 1px solid #c8e6c9;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
 }
 
-/* Herb Detail Layout */
+/* Herb Name */
+.card h3 {
+    margin: 0 0 0.25rem;
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
 
+/* Stretched link covering the whole card */
+.herb-link {
+    text-decoration: none;
+    color: var(--leaf-dark);
+}
+
+    .herb-link::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        border-radius: var(--radius-md);
+    }
+
+.card:hover .herb-link {
+    color: var(--leaf);
+}
+
+/* Botanical Latin Name */
+.latin {
+    margin: 0 0 0.85rem;
+    font-style: italic;
+    font-size: 0.9rem;
+    color: var(--soil);
+}
+
+/* Culinary & Usage description */
+.card p.use {
+    margin: 0 0 1.25rem;
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: #4a5568;
+    flex-grow: 1; /* Pushes the card footer to the bottom */
+}
+
+/* Card bottom prompt */
+.card-footer {
+    display: flex;
+    align-items: center;
+    border-top: 1px dashed var(--line);
+    padding-top: 0.85rem;
+}
+
+.view-cue {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--leaf);
+    transition: transform 0.2s ease;
+}
+
+.card:hover .view-cue {
+    transform: translateX(4px);
+}
+
+/* Herb Detail View */
 .herb-detail-container {
-    max-width: 760px;
-    margin: 2rem auto;
+    max-width: 780px;
+    margin: 1.5rem auto 3rem;
     padding: 0 1.25rem;
 }
 
-.breadcrumb a {
-    display: inline-block;
-    margin-bottom: 1.5rem;
-    color: #1b4332;
-    font-weight: 600;
-    text-decoration: none;
-}
-
-    .breadcrumb a:hover,
-    .breadcrumb a:focus {
-        text-decoration: underline;
-    }
-
 .herb-article {
-    background: #ffffff;
-    border-radius: 12px;
-    padding: 2rem;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    padding: 2.25rem;
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-md);
 }
 
 .herb-header {
     display: flex;
     align-items: center;
     gap: 1.25rem;
-    border-bottom: 2px solid #e2e8f0;
+    border-bottom: 1px solid var(--line);
     padding-bottom: 1.5rem;
+    margin-bottom: 1.75rem;
 }
 
-.herb-icon {
-    stroke: #2d6a4f;
-    flex-shrink: 0;
-}
+    .herb-header h2 {
+        margin: 0;
+        font-size: 2.25rem;
+        color: var(--leaf-dark);
+        letter-spacing: -0.02em;
+    }
 
-.herb-header h1 {
-    margin: 0;
-    font-size: 2.25rem;
-    color: #1a202c;
-}
+    .herb-header .latin-name {
+        margin: 0.35rem 0 0;
+        font-size: 1.1rem;
+        font-style: italic;
+        color: var(--soil-light);
+    }
 
-.latin-name {
-    margin: 0.25rem 0 0 0;
-    font-style: italic;
-    color: #4a5568;
-}
-
-/* CSS Grid layout */
+/* Two-column info cards */
 .herb-info-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
-    margin-top: 1.5rem;
 }
 
 .info-card {
-    background: #f7fafc;
-    padding: 1.25rem;
-    border-radius: 8px;
-    border-left: 4px solid #2d6a4f;
+    background: #fdfcf9;
+    padding: 1.35rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--leaf);
 }
 
-    .info-card h2 {
-        font-size: 1.1rem;
-        margin-top: 0;
-        color: #2d3748;
+    .info-card h3 {
+        font-size: 1.05rem;
+        font-weight: 700;
+        margin: 0 0 0.5rem;
+        color: var(--leaf-dark);
     }
 
     .info-card p {
-        margin: 0.5rem 0 0;
-        line-height: 1.5;
+        margin: 0;
+        line-height: 1.55;
+        color: #3f4741;
+        font-size: 0.95rem;
     }
 
-.card-link {
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-bottom: 1.25rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--leaf);
     text-decoration: none;
-    color: inherit;
-    display: block;
+    transition: transform 0.15s ease;
 }
 
-/* Responsive Behaviour: 2 columns on desktop, 1 on small screens */
+    .back-link:hover {
+        text-decoration: underline;
+        transform: translateX(-2px);
+    }
+
+/* Error State UI */
+.error-card {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 1.75rem 2rem;
+    background-color: #fff9f9;
+    border: 1px solid #ffd4d4;
+    border-left: 5px solid #d93838;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+.error-title {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    color: #b91c1c;
+    font-size: 1.4rem;
+}
+
+.error-message {
+    color: #4a5568;
+    margin: 0 0 1.25rem;
+    line-height: 1.5;
+}
+
+/* Keyboard Accessibility Focus */
+:focus-visible {
+    outline: 3px solid var(--leaf-accent);
+    outline-offset: 3px;
+    border-radius: var(--radius-sm);
+}
+
+h2[tabindex="-1"]:focus {
+    outline: none;
+}
+
+.site-header a:focus-visible {
+    outline-color: #ffffff;
+}
+
+/* Footer */
+footer {
+    padding: 2.5rem 1.5rem;
+    border-top: 1px solid var(--line);
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--soil-light);
+    background: #f7f5ee;
+}
+
+    footer p {
+        margin: 0;
+    }
+
+/* Responsive Layout */
 @media (max-width: 600px) {
     .herb-info-grid {
         grid-template-columns: 1fr;
         gap: 1rem;
     }
 
-    .herb-header {
-        flex-direction: column;
-        align-items: flex-start;
+    .herb-article {
+        padding: 1.5rem;
     }
-}
 
-/* Error Card UI */
-.error-card {
-    max-width: 600px;
-    margin: 2rem auto;
-    padding: 1.5rem 2rem;
-    background-color: #fff5f5;
-    border: 1px solid #fed7d7;
-    border-left: 6px solid #e53e3e;
-    border-radius: 8px;
-}
-
-.error-title {
-    margin-top: 0;
-    color: #c53030;
-    font-size: 1.5rem;
-}
-
-.error-message {
-    color: #4a5568;
-    margin: 0.75rem 0 1.25rem 0;
-    line-height: 1.5;
-}
-
-footer {
-  padding: 1.5rem;
-  border-top: 1px solid var(--line);
-  text-align: center;
-  color: var(--soil);
+    .site-header {
+        padding: 1rem 1.25rem;
+    }
 }

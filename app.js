@@ -20,20 +20,33 @@ function card(herb) {
     const item = element("li", "card", "")
     const slug = herb.name.toLowerCase()
 
+    // Life badge at top
+    const lifeBadge = element("span", "life", herb.life)
+
+    // Heading with link that stretches over the entire card
     const titleNode = element("h3", "name", "")
     const link = element("a", "herb-link", herb.name)
     link.href = `#${slug}`
+    link.setAttribute("aria-label", `View details for ${herb.name}`)
+    titleNode.append(link)
+
+    // Save reference for keyboard focus management
     link.addEventListener("click", () => {
         lastFocusedElement = link
     })
-    titleNode.append(link)
+
+    // Card footer with a subtle "View herb" cue
+    const cardFooter = element("div", "card-footer", "")
+    cardFooter.append(element("span", "view-cue", "View herb →"))
 
     item.append(
+        lifeBadge,
         titleNode,
         element("p", "latin", herb.latin),
         element("p", "use", herb.use),
-        element("p", "life", herb.life)
+        cardFooter
     )
+
     return item
 }
 
