@@ -10,7 +10,7 @@
 </head>
 <body>
   <header class="site-header">
-    <img class="logo" src="images/logo.svg" alt="" width="48" height="48">
+    <img class="logo" src="images/Logo.svg" alt="" width="48" height="48">
     <p class="site-name">The Little Herb Garden</p>
     <nav>
       <ul>
@@ -32,9 +32,23 @@
     </section>
 
     <section id="herbs">
-       <h2>What grows here</h2>
-       <p class="count">Loading the herbs…</p>
-       <ul id="herbs-list" class="cards"></ul>
+      <h2>What grows here</h2>
+      <div class="controls">
+        <label>
+          Search:
+          <input type="search" id="herb-search" placeholder="Name or use…">
+        </label>
+        <label>
+          Life cycle:
+          <select id="herb-filter">
+            <option value="all">All</option>
+            <option value="annual">Annual</option>
+            <option value="perennial">Perennial</option>
+          </select>
+        </label>
+      </div>
+      <p class="count">Loading the herbs…</p>
+      <ul id="herbs-list" class="cards"></ul>
     </section>
 
     <!-- Detail view container built dynamically by JavaScript -->

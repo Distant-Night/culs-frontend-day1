@@ -1,7 +1,16 @@
-﻿const herbsSection = document.querySelector("#herbs")
+const herbsSection = document.querySelector("#herbs")
 const herbsList = document.querySelector("#herbs-list")
 const count = document.querySelector(".count")
 const detailSection = document.querySelector("#herb-detail")
+
+const searchInput = document.querySelector("#herb-search")
+const filterSelect = document.querySelector("herb-filter")
+
+const state = {
+    herbs: [],
+    searchQuery: "",
+    lifeFilter: "all"
+}
 
 
 // Variable to remember the last focused link
