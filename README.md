@@ -1,10 +1,33 @@
-# Samuel Brabec(Distant-Night), Ivan Budko(rabochiyclasss)
+﻿# Samuel Brabec(Distant-Night), Ivan Budko(rabochiyclasss)
 # The Little Herb Garden
 
-A small website for day 1 of **Frontend Development**.
+A responsive single-page web application (SPA) displaying garden herbs, built using vanilla web technologies (HTML, CSS, JavaScript) without any external frameworks or libraries.
 
-It is broken. Your job is to find out why, and to repair it.
+---
 
+## Project Structure
+
+```text
+├── index.html         # Application shell (header, views container, footer)
+├── style.css          # Layout, color scheme, focus states, and responsive styling
+├── app.js             # Client-side router, view renderer, and accessibility logic
+├── data/
+│   ├── herbs.json     # Registry list used to render the catalog
+│   ├── basil.json     # Individual herb data files
+│   ├── chamomile.json
+│   ├── chives.json
+│   ├── lavender.json
+│   ├── rosemary.json
+│   ├── sage.json
+│   ├── spearmint.json
+│   └── thyme.json
+├── images/
+│   ├── logo.svg       # Site logo and favicon
+│   └── garden.png     # Hero picture for the intro section
+└── README.md          # Project documentation
+```
+
+---
 ## What you need
 
 - a GitHub account
@@ -55,26 +78,67 @@ You are done when:
 - every link on the page goes where it says
 - `git status` is clean, and `git push` has sent your commits to GitHub
 
-## The project
 
-```text
-index.html    the page
-style.css     how it looks
-app.js        what it does
-data/         the herbs, as JSON
-images/       the logo and a picture
-```
+## Features & Usage
 
-## Herb Data Format
+1. **Catalog Overview (`#herbs`):**
+   - Displays all herbs as interactive cards.
+   - Includes real-time search filtering by herb name, Latin name, lifecycle, or culinary use.
+2. **Dynamic Detail View (`#<herb>`):**
+   - Loads specific herb data on demand via `fetch()` without full-page reloads.
+3. **Graceful Error Handling:**
+   - Displays dedicated recovery cards when an unknown herb hash is entered (404) or when the server is unreachable, offering a clear way back to the catalog.
 
-Each herb is stored individually in its own JSON file under the `data/` directory named after its lowercase slug (e.g., `data/basil.json`).
+---
 
-Every JSON file must adhere to the following schema:
+## How Routing Works
+
+The site runs as a client-side Single Page Application (SPA) driven by the URL hash. `app.js` listens to the `hashchange` event:
+
+| URL Hash | Rendered View | Source |
+| :--- | :--- | :--- |
+| `index.html` or `#herbs` | Full catalog list | Fetches `data/herbs.json` |
+| `#visit` / `#about` | Section anchor navigation | In-page sections |
+| `#<herb>` (e.g. `#sage`) | Dynamic herb detail view | Fetches `data/<herb>.json` |
+
+---
+
+## Herb Data Format (`data/<id>.json`)
+
+All individual herbs must follow this schema:
 
 ```json
 {
-  "name": "String (Required) - Common name of the herb",
-  "latin": "String (Required) - Botanical Latin name",
-  "use": "String (Required) - Practical and culinary applications",
-  "life": "String (Required) - Life cycle (e.g., 'annual' or 'perennial')"
+  "name": "Sage",
+  "latin": "Salvia officinalis",
+  "use": "Butter sauces and tea.",
+  "life": "perennial"
 }
+```
+
+### Adding a New Herb
+1. Create a lowercase file in `data/` matching the herb name (e.g., `data/oregano.json`).
+2. Populate the JSON with `name`, `latin`, `use`, and `life`.
+3. Add the herb entry to `data/herbs.json` so it appears in the catalog list.
+
+---
+
+## Accessibility (a11y)
+
+- **Keyboard Navigation:** Fully navigable with `Tab` and `Shift+Tab`. Pressing `Escape` while inside any herb detail view returns immediately to the main catalog.
+- **Focus Management:** Focus shifts directly to the detail view heading upon navigation and restores to the previously selected card upon return.
+- **High-Contrast Focus Indicators:** All interactive elements feature visible `:focus-visible` styling.
+- **Semantic Structure:** Landmarks (`<header>`, `<nav>`, `<main>`, `<article>`, `<section>`, `<footer>`) ensure clear structure for assistive technologies.
+- **Responsive Layout:** CSS Grid and Flexbox reflow cleanly down to narrow mobile screens (320px).
+
+---
+
+## Deploying on GitHub Pages
+
+1. Push all commits to the `main` branch:
+   ```bash
+   git push origin main
+   ```
+2. On GitHub, navigate to **Settings** → **Pages**.
+3. Under **Build and deployment** → **Branch**, select `main` and root `/(root)`.
+4. Click **Save**. The live site will publish within 1–2 minutes.
